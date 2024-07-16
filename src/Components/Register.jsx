@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const Register = () => {
@@ -12,11 +13,23 @@ const Register = () => {
         const data = {name, number, email, password}
         axiosSecure.post('/register', data)
         .then(data => {
-            console.log(data)
+            if(data) {
+                Swal.fire({
+                    position: "top-center",
+                    icon: "success",
+                    title: "Registration Success",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
         })
         .catch(err => {
             if (err) {
-                alert(err.message)
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                  });
             }
         });
     }
