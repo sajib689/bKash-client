@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <div className='max-w-[500px] mx-auto'>
     <RouterProvider router={router}>
     <App />
-  </RouterProvider>,
+  </RouterProvider>
   </div>
   </div>
 )
