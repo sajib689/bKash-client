@@ -1,10 +1,15 @@
-import Register from "../Components/Register";
+
+
+import { Outlet } from "react-router-dom";
+
 
 
 const Home = () => {
     return (
         <div className="">
-            <Register/>
+
+           <Outlet/>
+           
         </div>
     );
 };

@@ -1,8 +1,10 @@
 import Swal from "sweetalert2";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate()
   const handleRegistration = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -25,6 +27,7 @@ const Register = () => {
           });
         }
         form.reset();
+        navigate('/')
       })
       .catch((err) => {
         if (err) {
@@ -107,6 +110,7 @@ const Register = () => {
         <label className="m-3 bg-[#bf8696] border-0 btn flex items-center gap-2">
           <button className="text-white hover:text-black">Register</button>
         </label>
+        <p className="text-center">Do you have an account? <Link to='/'>Login</Link></p>
       </form>
     </div>
   );
