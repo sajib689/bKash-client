@@ -8,6 +8,7 @@ import Register from "../Components/Register";
 import UserHome from "../Dashboard/UserHome";
 import PrivateRoute from './../Provider/PrivateRoute';
 import SendMoney from "../Dashboard/SendMoney";
+import Transactions from "../Dashboard/Transactions";
 
   const router = createBrowserRouter([
     {
@@ -31,8 +32,12 @@ import SendMoney from "../Dashboard/SendMoney";
     },
     {
       path: '/sendmoney',
-      element: <SendMoney/>
-    }
+      element: <PrivateRoute><SendMoney/></PrivateRoute>
+    },
+    {
+      path: '/transactions',
+      element: <PrivateRoute><Transactions/></PrivateRoute>
+    },
   ]);
 
   export default router;
