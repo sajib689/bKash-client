@@ -18,6 +18,8 @@ const UserHome = () => {
                     <Link to='/sendmoney' className="btn m-2 bg-[#E2136D] text-white hover:bg-[#E2136D]">Send Money</Link>
                     <button className="btn m-2 bg-[#E2136D] text-white hover:bg-[#E2136D]">Cash Out</button>
                     <button className="btn m-2 bg-[#E2136D] text-white hover:bg-[#E2136D]">Cash In</button>
+                    <Link to='/transactions' className="btn m-2 bg-[#E2136D] text-white hover:bg-[#E2136D]">Transactions</Link>
+                    <button className="btn m-2 bg-[#E2136D] text-white hover:bg-[#E2136D]">Sign Out</button>
                 </div>
             </div>
             <Outlet/>

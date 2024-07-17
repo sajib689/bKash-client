@@ -5,7 +5,7 @@ import useAxiosSecure from './../Hooks/useAxiosSecure';
 import { useNavigate } from "react-router-dom";
 
 const SendMoney = () => {
-    const { user, loading, setUser } = useContext(AuthContext);
+    const { user, loading, setUser, login } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const [balance, setBalance] = useState(null);
     const navigate = useNavigate();
@@ -27,37 +27,47 @@ const SendMoney = () => {
         const form = e.target;
         const recipientNumber = form.elements.sendNumber.value;
         const sendAmount = parseInt(form.elements.sendamount.value, 10);
+        const pin = form.elements.pin.value;
 
         if (sendAmount > 49) {
             if (balance >= sendAmount) {
                 try {
-                    const response = await axiosSecure.post(`/update-balance`, {
-                        senderNumber: user.number,
-                        recipientNumber,
-                        sendAmount
-                    });
+                    // Verify the PIN
+                    const pinResponse = await axiosSecure.post('/verify-pin', { number: user.number, pin });
+                    if (pinResponse.data.success) {
+                        // Proceed with updating balance and creating transaction
+                        const response = await axiosSecure.post('/update-balance', {
+                            senderNumber: user.number,
+                            recipientNumber,
+                            sendAmount
+                        });
 
-                    const newSenderBalance = response.data.newSenderBalance;
-                    setBalance(newSenderBalance);
-                    setUser({ ...user, balance: newSenderBalance });
-                    axiosSecure.post(`/transactions`, {
-                      senderName: user?.name,
-                      senderNumber: user?.number,
-                      recipientNumber: recipientNumber,
-                      sendAmount: sendAmount,
+                        const newSenderBalance = response.data.newSenderBalance;
+                        setBalance(newSenderBalance);
+                        setUser({ ...user, balance: newSenderBalance });
 
-                    })
-                    .then(data => {
-                      console.log(data)
-                    })
-                    Swal.fire({
-                        icon: "success",
-                        title: "Success",
-                        text: "Money sent successfully!",
-                    });
-                    navigate('/home');
+                        await axiosSecure.post('/transactions', {
+                            senderName: user?.name,
+                            senderNumber: user?.number,
+                            recipientNumber,
+                            sendAmount,
+                        });
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "Money sent successfully!",
+                        });
+                        navigate('/home');
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Invalid PIN",
+                            text: "The PIN you entered is incorrect.",
+                        });
+                    }
                 } catch (error) {
-                    console.error('Error updating balance:', error);
+                    console.error('Error updating balance or creating transaction:', error);
                     Swal.fire({
                         icon: "error",
                         title: "Error",
@@ -92,10 +102,17 @@ const SendMoney = () => {
                 required
             />
             <input
-                type="text"
+                type="number"
                 name="sendamount"
                 placeholder="Type amount here"
                 className="input input-bordered w-full max-w-xs"
+                required
+            />
+            <input
+                type="password"
+                name="pin"
+                placeholder="Type pin here"
+                className="input input-bordered w-full max-w-xs mt-2"
                 required
             />
             <button className="btn w-full max-w-xs mt-3 mb-6 bg-[#E2136D] hover:bg-[#E2136D] text-white">
