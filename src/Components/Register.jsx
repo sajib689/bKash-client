@@ -12,11 +12,14 @@ const Register = () => {
     const number = form.elements.number.value;
     const email = form.elements.email.value;
     const password = form.elements.password.value;
+    const balance = form.elements.balance.value;
+    const role = form.elements.role.value;
     if(password.length === 5) {
-        const data = { name, number, email, password };
+        const data = { name, balance, role, number, email, password };
     axiosSecure
       .post("/register", data)
       .then((data) => {
+        console.log(data);
         if (data) {
           Swal.fire({
             position: "top-center",
@@ -70,6 +73,22 @@ const Register = () => {
             type="number"
             className="grow"
             placeholder="Enter your number"
+          />
+        </label>
+        <label className="hidden m-3 input input-bordered flex items-center gap-2">
+          <input
+            name="balance"
+            type="number"
+            className="grow"
+            value='40'
+          />
+        </label>
+        <label className="hidden m-3 input input-bordered flex items-center gap-2">
+          <input
+            name="role"
+            type="text"
+            className="grow"
+            value='user'
           />
         </label>
         <label className="m-3 input input-bordered flex items-center gap-2">
